@@ -1,4 +1,6 @@
 
+import 'package:body_checkup/features/authendication/screens/login/login.dart';
+
 import '../features/splash/splash_page.dart';
 import '../navigation_menu.dart';
 import '../utils/helpers/path_provider.dart';
@@ -10,11 +12,10 @@ class AppRoutes {
       name: AppPages.splash,
       page: () => const SplashPage(),
     ),
-    // GetPage(
-    //   name: AppPages.login,
-    //   binding: LoginBindings(),
-    //   page: () => const LoginPage(),
-    // ),
+    GetPage(
+      name: AppPages.login,
+      page: () => const LoginScreen(),
+    ),
     // GetPage(
     //   name: AppPages.dashboard,
     //   binding: DashboardBindings(),

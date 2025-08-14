@@ -3,6 +3,8 @@ import 'package:body_checkup/routes/app_routes.dart';
 import 'package:body_checkup/utils/helpers/path_provider.dart';
 import 'package:body_checkup/utils/theme/theme.dart';
 
+import 'bindings/general_binding.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +21,7 @@ class MyApp extends StatelessWidget {
       title: TTexts.appName,
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.system,
-      // initialBinding: GeneralBinding(),
+      initialBinding: GeneralBinding(),
       initialRoute: AppPages.splash,
       getPages: AppRoutes.routes,
       theme: TAppTheme.lightTheme,

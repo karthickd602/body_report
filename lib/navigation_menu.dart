@@ -3,6 +3,7 @@ import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+
 import 'features/dashboard/dashboard_page.dart';
 import 'features/profile/profile_page.dart';
 import 'utils/constants/path_provider.dart';

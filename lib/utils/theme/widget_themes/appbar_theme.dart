@@ -1,6 +1,3 @@
-import 'package:flutter/material.dart';
-
-import '../../constants/colors.dart';
 import '../../helpers/path_provider.dart';
 
 class TAppBarTheme{

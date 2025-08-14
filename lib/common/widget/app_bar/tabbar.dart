@@ -1,7 +1,4 @@
 
-import '../../../utils/constants/colors.dart';
-import '../../../utils/device/device_utility.dart';
-import '../../../utils/helpers/helper_functions.dart';
 import '../../../utils/helpers/path_provider.dart';
 
 

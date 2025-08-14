@@ -1,4 +1,3 @@
-import '../../utils/constants/image_strings.dart';
 import '../../utils/helpers/path_provider.dart';
 import 'splash_controller.dart';
 
