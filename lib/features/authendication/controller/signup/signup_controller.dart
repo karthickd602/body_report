@@ -21,13 +21,13 @@ class SignupController extends GetxController {
   final authRepo =
   Get.put(AuthendicationRepository());
 
-  // New Medical Data
-  final dob = TextEditingController();
-  final medicalHistory = TextEditingController();
-  final prescription = TextEditingController();
+    // New Medical Data
+    final dob = TextEditingController();
+    final medicalHistory = TextEditingController();
+    final prescription = TextEditingController();
 
-  // File Upload
-  var prescriptionFileName = "".obs;
+    // File Upload
+    var prescriptionFileName = "".obs;
 
 
   Future<void> pickPrescriptionFile() async {
@@ -76,7 +76,7 @@ class SignupController extends GetxController {
           userName: username.text.trim(),
           email: email.text.trim(),
           profilePicture: '',
-          password: password.text.trim());
+          password: password.text.trim(), dob: dob.text, medicalHistory: medicalHistory.text, prescription: prescription.text);
 
       final userRepository = Get.put(UserRepoisitory());
       userRepository.saveUserRecord(newUser);

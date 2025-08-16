@@ -11,6 +11,9 @@ class UserModel {
   String phoneNumber;
   final String userName;
   final String email;
+  final String dob;
+  final String medicalHistory;
+  final String prescription;
 
   String password;
   String profilePicture;
@@ -23,7 +26,7 @@ class UserModel {
       required this.userName,
       required this.email,
       required this.password,
-      required this.profilePicture});
+      required this.profilePicture,required this.dob, required this.medicalHistory, required this.prescription, });
 
   ///Helper function to get the full name
   String get fullname => '$firstName $lastName';
@@ -52,7 +55,7 @@ class UserModel {
       userName: '',
       password: '',
       email: '',
-      profilePicture: '');
+      profilePicture: '', dob: '', medicalHistory: '', prescription: '');
 
   ///Convert model to Json struture for storing data in Firebase
   Map<String, dynamic> toJson() {
@@ -64,6 +67,9 @@ class UserModel {
       'PhoneNumber': formattedPhoneNumber,
       'Password': password,
       'ProfilePicture': profilePicture,
+      'Dob':dob,
+      'MedicalHistory':medicalHistory,
+      'Prescription':prescription
     };
   }
 
@@ -81,6 +87,9 @@ class UserModel {
         phoneNumber: data['PhoneNumber'] ?? '',
         password: data['Password'] ?? '',
         profilePicture: data['ProfilePicture'] ?? '',
+        dob:data['Dob'],
+        medicalHistory: data['MedicalHistory'],
+        prescription: data['Prescription'],
       );
     } else {
       throw 'No data ';

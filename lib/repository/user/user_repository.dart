@@ -38,6 +38,8 @@ class UserRepoisitory extends GetxController {
   /// Fetch the User Details based on user ID
   Future<UserModel> fetchUserDetails() async {
     try {
+
+      print("User Id: ${AuthendicationRepository.instance.authUser?.uid}");
       final documentSnapshot = await _db
           .collection("Users")
           .doc(AuthendicationRepository.instance.authUser?.uid)
@@ -56,7 +58,7 @@ class UserRepoisitory extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'something went wrong, please try again ';
+      throw 'something went wrong, please try again---${e.toString()} ';
     }
   }
 
