@@ -22,7 +22,7 @@ class SignupController extends GetxController {
   Get.put(AuthendicationRepository());
 
   // New Medical Data
-  final age = TextEditingController();
+  final dob = TextEditingController();
   final medicalHistory = TextEditingController();
   final prescription = TextEditingController();
 

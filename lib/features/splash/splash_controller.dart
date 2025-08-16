@@ -17,8 +17,8 @@ class SplashController extends GetxController {
 
   void validate() async {
 // Get.put(()=>AuthendicationRepository());
-
+await AuthendicationRepository.instance.screenRedirect();
     // Get.offNamed(AppPages.bottomNav);
-    Get.offNamed(AppPages.login);
+    // Get.offNamed(AppPages.login);
   }
 }

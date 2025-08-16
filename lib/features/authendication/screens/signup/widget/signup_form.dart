@@ -119,15 +119,31 @@ class TSignUpForm extends StatelessWidget {
               // =========================
 
               /// Age
+              /// Date of Birth
               TextFormField(
-                controller: controller.age,
+                controller: controller.dob,
+                readOnly: true, // Prevent manual typing
                 validator: (value) =>
-                    TValidator.validateEmptyField("Age", value),
-                keyboardType: TextInputType.number,
+                    TValidator.validateEmptyField("Date of Birth", value),
                 decoration: const InputDecoration(
-                  labelText: "Age",
+                  labelText: "Date of Birth",
                   prefixIcon: Icon(Iconsax.calendar_1),
+                  suffixIcon: Icon(Iconsax.calendar), // calendar icon
                 ),
+                onTap: () async {
+                  DateTime? pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime(2000), // default
+                    firstDate: DateTime(1900), // minimum DOB
+                    lastDate: DateTime.now(), // today (cannot pick future)
+                  );
+
+                  if (pickedDate != null) {
+                    controller.dob.text = THelperFunctions.getFormattedDate(pickedDate);
+                    // controller.dob.text =
+                    // "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+                  }
+                },
               ),
               const SizedBox(height: TSizes.spaceBtwInputFields),
 
@@ -157,12 +173,6 @@ class TSignUpForm extends StatelessWidget {
               ),
               const SizedBox(height: TSizes.spaceBtwInputFields),
 
-              /// Prescription File Upload (Optional)
-              OutlinedButton.icon(
-                onPressed: () => controller.pickPrescriptionFile(),
-                icon: const Icon(Iconsax.document_upload),
-                label: const Text("Upload Prescription File"),
-              ),
               Obx(() => Text(
                 controller.prescriptionFileName.value,
                 style: const TextStyle(fontSize: 12),
