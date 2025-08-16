@@ -18,6 +18,8 @@ class SignupController extends GetxController {
   final phoneNo = TextEditingController();
   final password = TextEditingController();
   GlobalKey<FormState> signupFormKey = GlobalKey<FormState>();
+  final authRepo =
+  Get.put(AuthendicationRepository());
 
   void signup() async {
     try {
@@ -44,8 +46,7 @@ class SignupController extends GetxController {
           'We are processing your information...', TImages.dockerAnimation);
 
       ///Register user in the firebase
-      final userCredential = await AuthendicationRepository.instance
-          .registerWithEmailAndPassword(
+      final userCredential = await authRepo.registerWithEmailAndPassword(
               email.text.trim(), password.text.trim());
 
       ///Save authendication data in firebase firestore

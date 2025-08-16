@@ -43,9 +43,9 @@ class VerifyEmailController extends GetxController {
         Get.off(() => SuccessScreen(
               image: TImages.successfullyRegisterAnimation,
               title: TTexts.yourAccountCreatedTitle,
-              subtitle: TTexts.yourAccountCreatedSubTitle, onpressed: () {  },
-              // onpressed: () =>
-              //     AuthendicationRepository.instance.screenRedirect(),
+              subtitle: TTexts.yourAccountCreatedSubTitle,
+              onpressed: () =>
+                  AuthendicationRepository.instance.screenRedirect(),
             ));
       }
     });
@@ -57,8 +57,8 @@ class VerifyEmailController extends GetxController {
       Get.off(() => SuccessScreen(
             image: TImages.successfullyRegisterAnimation,
             title: TTexts.yourAccountCreatedTitle,
-            subtitle: TTexts.yourAccountCreatedSubTitle, onpressed: () {  },
-            // onpressed: () => AuthendicationRepository.instance.screenRedirect(),
+            subtitle: TTexts.yourAccountCreatedSubTitle,
+            onpressed: () => AuthendicationRepository.instance.screenRedirect(),
           ));
     }
   }

@@ -10,7 +10,10 @@ import '../../../utils/exceptions/firebase_exceptions.dart';
 import '../../../utils/exceptions/format_exceptions.dart';
 import '../../../utils/exceptions/platform_exceptions.dart';
 import '../../features/authendication/screens/login/login.dart';
+import '../../features/authendication/screens/onBoarding/onboarding.dart';
+import '../../features/authendication/screens/signup/verify_email.dart';
 import '../../utils/exceptions/firebase_auth_exceptions.dart';
+import '../../utils/local_storage/storage_utility.dart';
 // import '../user/user_repository.dart';
 
 class AuthendicationRepository extends GetxController {
@@ -24,32 +27,32 @@ class AuthendicationRepository extends GetxController {
 
   @override
   void onReady() {
-    // screenRedirect();
+    screenRedirect();
   }
 
   ///Screen redirect to relevant screen
-//   screenRedirect() async {
-//     final user = _auth.currentUser;
-//
-//     if (user != null) {
-//       /// if user is logged in
-//       if (user.emailVerified) {
-//         /// Intialize the user specefic Local storage
-//         await TLocalStorage.init(user.uid);
-// Get.offAllNamed(AppPages.bottomNav);
-//       } else {
-//         // Get.offAll(() => VerifyEmailScreen(email: _auth.currentUser?.email));
-//       }
-//     } else {
-//       deviceStorage.writeIfNull('IsFirstTime', true);
-//       deviceStorage.read('IsFirstTime') != true
-//           ? Get.offAll(() => const LoginScreen())
-//           : Get.offAll(() => const OnBoardingScreen());
-//     }
-//
-//     ///Called from main.dart on app launch
-//     ///Local Storage
-//   }
+  screenRedirect() async {
+    final user = _auth.currentUser;
+
+    if (user != null) {
+      /// if user is logged in
+      if (user.emailVerified) {
+        /// Intialize the user specefic Local storage
+        await TLocalStorage.init(user.uid);
+Get.offAllNamed(AppPages.bottomNav);
+      } else {
+        Get.offAll(() => VerifyEmailScreen(email: _auth.currentUser?.email));
+      }
+    } else {
+      deviceStorage.writeIfNull('IsFirstTime', true);
+      deviceStorage.read('IsFirstTime') != true
+          ? Get.offAll(() => const LoginScreen())
+          : Get.offAll(() => const OnBoardingScreen());
+    }
+
+    ///Called from main.dart on app launch
+    ///Local Storage
+  }
 
 /*--------------------------------Email & Password sign in ---------------------------*/
 

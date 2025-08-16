@@ -1,3 +1,4 @@
+import 'package:body_checkup/repository/authendication/authendication_repository.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../../routes/app_pages.dart';
@@ -15,7 +16,7 @@ class SplashController extends GetxController {
   }
 
   void validate() async {
-
+// Get.put(()=>AuthendicationRepository());
 
     // Get.offNamed(AppPages.bottomNav);
     Get.offNamed(AppPages.login);

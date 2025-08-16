@@ -53,7 +53,7 @@ class LoginController extends GetxController {
           .loginWithEmailAndPassword(email.text.trim(), password.text.trim());
       TFullScreenLoader.stopLoading();
 
-      // AuthendicationRepository.instance.screenRedirect();
+      AuthendicationRepository.instance.screenRedirect();
 
       TLoaders.successSnackBar(
           title: 'Login Successfully', message: email.text.trim());
