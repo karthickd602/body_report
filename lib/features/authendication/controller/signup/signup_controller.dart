@@ -21,6 +21,24 @@ class SignupController extends GetxController {
   final authRepo =
   Get.put(AuthendicationRepository());
 
+  // New Medical Data
+  final age = TextEditingController();
+  final medicalHistory = TextEditingController();
+  final prescription = TextEditingController();
+
+  // File Upload
+  var prescriptionFileName = "".obs;
+
+
+  Future<void> pickPrescriptionFile() async {
+    // You can use file_picker or image_picker package
+    // Example:
+    // FilePickerResult? result = await FilePicker.platform.pickFiles();
+    // if (result != null) {
+    //   prescriptionFileName.value = result.files.single.name;
+    // }
+  }
+
   void signup() async {
     try {
       ///Check Internet Connectivity
