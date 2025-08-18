@@ -15,18 +15,24 @@ class UserModel {
   final String medicalHistory;
   final String prescription;
 
+  final String emergencyMobile;
   String password;
   String profilePicture;
 
-  UserModel(
-      {required this.id,
-      required this.firstName,
-      required this.lastName,
-      required this.phoneNumber,
-      required this.userName,
-      required this.email,
-      required this.password,
-      required this.profilePicture,required this.dob, required this.medicalHistory, required this.prescription, });
+  UserModel({
+    required this.id,
+    required this.firstName,
+    required this.lastName,
+    required this.phoneNumber,
+    required this.userName,
+    required this.email,
+    required this.password,
+    required this.emergencyMobile,
+    required this.profilePicture,
+    required this.dob,
+    required this.medicalHistory,
+    required this.prescription,
+  });
 
   ///Helper function to get the full name
   String get fullname => '$firstName $lastName';
@@ -48,14 +54,19 @@ class UserModel {
 
   ///Static function to create an empty user model
   static UserModel empty() => UserModel(
-      id: '',
-      firstName: '',
-      lastName: '',
-      phoneNumber: '',
-      userName: '',
-      password: '',
-      email: '',
-      profilePicture: '', dob: '', medicalHistory: '', prescription: '');
+    id: '',
+    firstName: '',
+    lastName: '',
+    phoneNumber: '',
+    userName: '',
+    password: '',
+    email: '',
+    profilePicture: '',
+    dob: '',
+    medicalHistory: '',
+    prescription: '',
+    emergencyMobile: '',
+  );
 
   ///Convert model to Json struture for storing data in Firebase
   Map<String, dynamic> toJson() {
@@ -67,15 +78,17 @@ class UserModel {
       'PhoneNumber': formattedPhoneNumber,
       'Password': password,
       'ProfilePicture': profilePicture,
-      'Dob':dob,
-      'MedicalHistory':medicalHistory,
-      'Prescription':prescription
+      'Dob': dob,
+      'MedicalHistory': medicalHistory,
+      'Prescription': prescription,
+      'EmergencyMobile': emergencyMobile,
     };
   }
 
   ///Factory method to create a user model from a firebase document snapshot
   factory UserModel.fromSnapshot(
-      DocumentSnapshot<Map<String, dynamic>> document) {
+    DocumentSnapshot<Map<String, dynamic>> document,
+  ) {
     if (document.data() != null) {
       final data = document.data()!;
       return UserModel(
@@ -87,9 +100,10 @@ class UserModel {
         phoneNumber: data['PhoneNumber'] ?? '',
         password: data['Password'] ?? '',
         profilePicture: data['ProfilePicture'] ?? '',
-        dob:data['Dob'],
+        dob: data['Dob'],
         medicalHistory: data['MedicalHistory'],
         prescription: data['Prescription'],
+        emergencyMobile: data['EmergencyMobile'],
       );
     } else {
       throw 'No data ';

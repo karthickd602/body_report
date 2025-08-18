@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 import 'features/dashboard/dashboard_page.dart';
+import 'features/prediction/prediction_page.dart';
 import 'features/profile/profile_page.dart';
 import 'utils/constants/path_provider.dart';
 
@@ -41,6 +42,13 @@ class NavigationMenu extends StatelessWidget {
                   ),
                   label: 'Home',
                   labelStyle: TextStyle(color: Colors.white)),
+          CurvedNavigationBarItem(
+                  child: Icon(
+                    Iconsax.activity,
+                    color: Colors.white,
+                  ),
+                  label: 'Prediction',
+                  labelStyle: TextStyle(color: Colors.white)),
 
               CurvedNavigationBarItem(
                   child: Icon(
@@ -61,6 +69,8 @@ class NavigationController extends GetxController {
 
   final screens = [
     DashboardPage(),
+
+    PredictionPage(),
     ProfilePage(),
     // const HomeScreen(),
     // const StoreScreen(),

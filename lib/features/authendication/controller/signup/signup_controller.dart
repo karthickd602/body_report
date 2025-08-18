@@ -25,6 +25,7 @@ class SignupController extends GetxController {
     final dob = TextEditingController();
     final medicalHistory = TextEditingController();
     final prescription = TextEditingController();
+    final emergencyMobile = TextEditingController();
 
     // File Upload
     var prescriptionFileName = "".obs;
@@ -75,6 +76,7 @@ class SignupController extends GetxController {
           phoneNumber: phoneNo.text.trim(),
           userName: username.text.trim(),
           email: email.text.trim(),
+          emergencyMobile: emergencyMobile.text,
           profilePicture: '',
           password: password.text.trim(), dob: dob.text, medicalHistory: medicalHistory.text, prescription: prescription.text);
 

@@ -27,9 +27,6 @@ class LoginScreen extends StatelessWidget {
               ///
               const TLoginForm(),
 
-              ///Divider
-              // TFormDivder(divdertext: TTexts.orSignInWith.capitalize!),
-
             ],
           ),
         ),

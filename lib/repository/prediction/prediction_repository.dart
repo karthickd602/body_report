@@ -12,19 +12,20 @@ import '../../../utils/exceptions/firebase_auth_exceptions.dart';
 import '../../../utils/exceptions/firebase_exceptions.dart';
 import '../../../utils/exceptions/format_exceptions.dart';
 import '../../../utils/exceptions/platform_exceptions.dart';
+import '../../models/prediction_model.dart';
 import '../../models/user_model.dart';
 import '../../utils/constants/text_strings.dart';
 import '../authendication/authendication_repository.dart';
 
-class UserRepoisitory extends GetxController {
-  static UserRepoisitory get instance => Get.find();
+class PredictionRepository extends GetxController {
+  static PredictionRepository get instance => Get.find();
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final storage = TLocalStorage.instance();
 
   /// Save the User Details to Firestore
-  Future<void> saveUserRecord(UserModel user) async {
+  Future<void> savePrediction(PatientReportModel patient) async {
     try {
-      return await _db.collection('Users').doc(user.id).set(user.toJson());
+      return await _db.collection('Predictions').doc(patient.id).set(patient.toJson());
     } on FirebaseAuthException catch (e) {
       throw TFirebaseAuthException(e.code).message;
     } on FirebaseException catch (e) {
@@ -38,30 +39,24 @@ class UserRepoisitory extends GetxController {
     }
   }
 
-  /// Fetch the User Details based on user ID
-  Future<UserModel> fetchUserDetails() async {
-    try {
 
-      // print("User Id: ${AuthendicationRepository.instance.authUser?.uid}");
-      final documentSnapshot = await _db
-          .collection("Users")
-          .doc(storage.readData(TTexts.userId))
+  /// 🔹 Fetch all reports of the logged-in user
+  Future<List<PatientReportModel>> fetchAllReports() async {
+    try {
+      final userId = TLocalStorage.instance().readData(TTexts.userId);
+
+      final querySnapshot = await _db
+          .collection("Predictions")
+          .where('userId', isEqualTo: userId)
           .get();
-      if (documentSnapshot.exists) {
-        return UserModel.fromSnapshot(documentSnapshot);
-      } else {
-        return UserModel.empty();
-      }
-    } on FirebaseAuthException catch (e) {
-      throw TFirebaseAuthException(e.code).message;
-    } on FirebaseException catch (e) {
-      throw TFirebaseException(e.code).message;
-    } on FormatException catch (_) {
-      throw TFormatException();
-    } on PlatformException catch (e) {
-      throw TPlatformException(e.code).message;
+
+      return querySnapshot.docs
+          .map((doc) => PatientReportModel.fromSnapshot(doc))
+          .toList();
+
     } catch (e) {
-      throw 'something went wrong, please try again---${e.toString()} ';
+      print(e.toString());
+      throw 'Something went wrong: ${e.toString()}';
     }
   }
 
@@ -106,42 +101,7 @@ class UserRepoisitory extends GetxController {
     }
   }
 
-  /// Delete or Remove the user Data
 
-  Future<void> removeUserRecord(String userId) async {
-    try {
-      return await _db.collection('Users').doc(userId).delete();
-    } on FirebaseAuthException catch (e) {
-      throw TFirebaseAuthException(e.code).message;
-    } on FirebaseException catch (e) {
-      throw TFirebaseException(e.code).message;
-    } on FormatException catch (_) {
-      throw TFormatException();
-    } on PlatformException catch (e) {
-      throw TPlatformException(e.code).message;
-    } catch (e) {
-      throw 'something went wrong, please try again ';
-    }
-  }
 
-  /// Update Profile Picture
 
-  Future<String> uploadImage(String path, XFile image) async {
-    try {
-      final ref = FirebaseStorage.instance.ref(path).child(image.name);
-      await ref.putFile(File(image.path));
-      final url = await ref.getDownloadURL();
-      return url;
-    } on FirebaseAuthException catch (e) {
-      throw TFirebaseAuthException(e.code).message;
-    } on FirebaseException catch (e) {
-      throw TFirebaseException(e.code).message;
-    } on FormatException catch (_) {
-      throw TFormatException();
-    } on PlatformException catch (e) {
-      throw TPlatformException(e.code).message;
-    } catch (e) {
-      throw 'something went wrong, please try again ';
-    }
-  }
 }

@@ -15,110 +15,136 @@ class EditProfilePage extends StatelessWidget {
       appBar: AppBar(title: const Text("Edit Profile")),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            TextFormField(
-              controller: controller.firstName,
-              decoration: const InputDecoration(
-                labelText: "First Name",
-                prefixIcon: Icon(Iconsax.user),
+        child: Form(
+          key: controller.profileFormKey,
+          child: Column(
+            children: [
+              TextFormField(
+                controller: controller.firstName,
+                validator:(value)=> TValidator.validateEmptyField("First Name", value),
+                decoration: const InputDecoration(
+                  labelText: "First Name",
+                  prefixIcon: Icon(Iconsax.user),
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
+              const SizedBox(height: 10),
 
-            TextFormField(
-              controller: controller.lastName,
-              decoration: const InputDecoration(
-                labelText: "Last Name",
-                prefixIcon: Icon(Iconsax.user),
+              TextFormField(
+                validator:(value)=> TValidator.validateEmptyField("Last Name", value),
+
+                controller: controller.lastName,
+                decoration: const InputDecoration(
+                  labelText: "Last Name",
+                  prefixIcon: Icon(Iconsax.user),
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
+              const SizedBox(height: 10),
 
-            TextFormField(
-              readOnly:true,
-              controller: controller.username,
-              decoration: const InputDecoration(
-                labelText: "Username",
-                prefixIcon: Icon(Iconsax.user_edit),
+              TextFormField(
+                validator:(value)=> TValidator.validateEmptyField("User Name", value),
+
+                readOnly:true,
+                controller: controller.username,
+                decoration: const InputDecoration(
+                  labelText: "Username",
+                  prefixIcon: Icon(Iconsax.user_edit),
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
+              const SizedBox(height: 10),
 
-            TextFormField(
-              readOnly: true,
-              controller: controller.email,
-              decoration: const InputDecoration(
-                labelText: "Email",
-                prefixIcon: Icon(Iconsax.direct),
+              TextFormField(
+                readOnly: true,
+                validator:(value)=> TValidator.validateEmptyField("Email", value),
+
+                controller: controller.email,
+                decoration: const InputDecoration(
+                  labelText: "Email",
+                  prefixIcon: Icon(Iconsax.direct),
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
+              const SizedBox(height: 10),
 
-            TextFormField(
+              TextFormField(
+                validator:(value)=> TValidator.validateEmptyField("Phone Number", value),
 
-              readOnly: true,
-              controller: controller.phoneNo,
-              decoration: const InputDecoration(
-                labelText: "Phone",
-                prefixIcon: Icon(Iconsax.call),
+                readOnly: true,
+                controller: controller.phoneNo,
+                decoration: const InputDecoration(
+                  labelText: "Phone",
+                  prefixIcon: Icon(Iconsax.call),
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
+              const SizedBox(height: 10),
 
-            TextFormField(
-              controller: controller.dob,
-              readOnly: true,
-              decoration: const InputDecoration(
-                labelText: "Date of Birth",
-                prefixIcon: Icon(Iconsax.calendar_1),
+              TextFormField(
+                controller: controller.dob,
+                validator:(value)=> TValidator.validateEmptyField("Date of Birth", value),
+
+                readOnly: true,
+                decoration: const InputDecoration(
+                  labelText: "Date of Birth",
+                  prefixIcon: Icon(Iconsax.calendar_1),
+                ),
+                onTap: () async {
+                  DateTime? pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.tryParse(controller.dob.text) ??
+                        DateTime(2000),
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime.now(),
+                  );
+                  if (pickedDate != null) {
+                    controller.dob.text =
+                    "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+                  }
+                },
               ),
-              onTap: () async {
-                DateTime? pickedDate = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.tryParse(controller.dob.text) ??
-                      DateTime(2000),
-                  firstDate: DateTime(1900),
-                  lastDate: DateTime.now(),
-                );
-                if (pickedDate != null) {
-                  controller.dob.text =
-                  "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
-                }
-              },
-            ),
-            const SizedBox(height: 10),
+              const SizedBox(height: 10),
 
-            TextFormField(
-              controller: controller.medicalHistory,
-              maxLines: 3,
-              decoration: const InputDecoration(
-                labelText: "Medical History",
-                prefixIcon: Icon(Iconsax.hospital),
+              TextFormField(
+                validator:(value)=> TValidator.validateEmptyField("Medical History", value),
+
+                controller: controller.medicalHistory,
+                maxLines: 3,
+                decoration: const InputDecoration(
+                  labelText: "Medical History",
+                  prefixIcon: Icon(Iconsax.hospital),
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
+              const SizedBox(height: 10),
 
-            TextFormField(
-              controller: controller.prescription,
-              maxLines: 3,
-              decoration: const InputDecoration(
-                labelText: "Prescription",
-                prefixIcon: Icon(Iconsax.clipboard_text),
+              TextFormField(
+                validator:(value)=> TValidator.validateEmptyField("Prescription", value),
+                controller: controller.prescription,
+                maxLines: 3,
+                decoration: const InputDecoration(
+                  labelText: "Prescription",
+                  prefixIcon: Icon(Iconsax.clipboard_text),
+                ),
               ),
-            ),
+              const SizedBox(height: TSizes.spaceBtwInputFields),
+              TextFormField(
+                controller: controller.emergencyMobile,
+                validator: (value) =>
+                    TValidator.validateEmptyField("Emergency Contact", value),
+                decoration: const InputDecoration(
+                  labelText: "Emergency Contact",
+                  prefixIcon: Icon(Iconsax.call),
+                ),
+              ),
 
-            const SizedBox(height: 20),
-            ElevatedButton.icon(
-              onPressed: () {
-                // Save updates to backend
-                controller.updateProfile();
-                Get.back(); // Go back to profile page
-              },
-              icon:  Icon(Iconsax.save_2),
-              label: const Text("Save Changes"),
-            ),
-          ],
+              const SizedBox(height: 20),
+              ElevatedButton.icon(
+                onPressed: () {
+                  // Save updates to backend
+                  controller.updateProfile();
+                  Get.back(); // Go back to profile page
+                },
+                icon:  Icon(Iconsax.save_2),
+                label: const Text("Save Changes"),
+              ),
+            ],
+          ),
         ),
       ),
     );

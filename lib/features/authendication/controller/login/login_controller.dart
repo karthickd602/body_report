@@ -1,3 +1,5 @@
+import 'package:body_checkup/utils/constants/text_strings.dart';
+import 'package:body_checkup/utils/local_storage/storage_utility.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -49,8 +51,10 @@ class LoginController extends GetxController {
       }
 
       ///Login user using email and password
-      await AuthendicationRepository.instance
+   final auth=   await AuthendicationRepository.instance
           .loginWithEmailAndPassword(email.text.trim(), password.text.trim());
+print("Userr Isddd : ${auth.user!.uid}");
+      TLocalStorage.instance().saveData(TTexts.userId , auth.user!.uid);
       TFullScreenLoader.stopLoading();
 
       AuthendicationRepository.instance.screenRedirect();

@@ -47,7 +47,7 @@ Get.offAllNamed(AppPages.bottomNav);
       deviceStorage.writeIfNull('IsFirstTime', true);
       deviceStorage.read('IsFirstTime') != true
           ? Get.offAll(() => const LoginScreen())
-          : Get.offAll(() => const OnBoardingScreen());
+          : Get.offAll(() => const LoginScreen());
     }
 
     ///Called from main.dart on app launch

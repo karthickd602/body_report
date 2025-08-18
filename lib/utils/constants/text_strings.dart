@@ -68,6 +68,7 @@ class TTexts {
   /// -- Local Storage keyWords
   static const String lsFavoriteList = "FAVORITES";
   static const String lsCartItems = "CART_ITEMS";
+  static const String userId = "USER_ID";
 
 }
 

@@ -172,11 +172,17 @@ class TSignUpForm extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: TSizes.spaceBtwInputFields),
+              TextFormField(
+                controller: controller.emergencyMobile,
+                validator: (value) =>
+                    TValidator.validateEmptyField("Emergency Contact", value),
+                decoration: const InputDecoration(
+                  labelText: "Emergency Contact",
+                  prefixIcon: Icon(Iconsax.call),
+                ),
+              ),
+              const SizedBox(height: TSizes.spaceBtwInputFields),
 
-              Obx(() => Text(
-                controller.prescriptionFileName.value,
-                style: const TextStyle(fontSize: 12),
-              )),
 
               const SizedBox(height: TSizes.spaceBtwSections),
 

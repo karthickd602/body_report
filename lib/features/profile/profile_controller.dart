@@ -1,11 +1,11 @@
 import 'package:body_checkup/utils/helpers/path_provider.dart';
+import 'package:body_checkup/utils/local_storage/storage_utility.dart';
 
 import '../../models/user_model.dart';
 import '../../repository/user/user_repository.dart';
+import '../../utils/constants/image_strings.dart';
 
-class ProfileController extends GetxController{
-
-
+class ProfileController extends GetxController {
   ///Variables
   final firstName = TextEditingController();
   final lastName = TextEditingController();
@@ -18,21 +18,21 @@ class ProfileController extends GetxController{
   final dob = TextEditingController();
   final medicalHistory = TextEditingController();
   final prescription = TextEditingController();
+  final emergencyMobile = TextEditingController();
   final profileLoader = false.obs;
 
-
+  final storage = TLocalStorage.instance();
+  final profileFormKey = GlobalKey<FormState>();
   final userRepository = Get.put(UserRepoisitory());
 
   Rx<UserModel> user = UserModel.empty().obs;
 
-
   @override
-  onInit(){
+  onInit() {
     super.onInit();
     fetchUserRecords();
-
-
   }
+
   /// Fetch User Records
   Future<void> fetchUserRecords() async {
     try {
@@ -50,7 +50,7 @@ class ProfileController extends GetxController{
       prescription.text = user.value.prescription;
       profileLoader.value = false;
     } catch (e) {
-      TLoaders.errorSnackBar(title: "Oh Snap!",message: e.toString());
+      TLoaders.errorSnackBar(title: "Oh Snap!", message: e.toString());
       user(UserModel.empty());
       profileLoader.value = false;
     } finally {
@@ -58,8 +58,54 @@ class ProfileController extends GetxController{
     }
   }
 
-  Future<void> updateProfile()async{}
+  void updateProfile() async {
+    try {
+      ///Check Internet Connectivity
+      final isConnected = await NetworkManager.instance.isConnected();
+      if (!isConnected) {
+        return;
+      }
 
+      ///Form Validation
+      if (!profileFormKey.currentState!.validate()) return;
 
+      ///start loading
+      TFullScreenLoader.openLoadingDialog(
+        'We are processing your information...',
+        TImages.dockerAnimation,
+      );
 
+      ///Save authendication data in firebase firestore
+      final newUser = UserModel(
+        id: storage.readData(TTexts.userId),
+        firstName: firstName.text.trim(),
+        lastName: lastName.text.trim(),
+        phoneNumber: phoneNo.text.trim(),
+        userName: username.text.trim(),
+        email: email.text.trim(),
+        profilePicture: '',
+        emergencyMobile: emergencyMobile.text,
+        password: password.text.trim(),
+        dob: dob.text,
+        medicalHistory: medicalHistory.text,
+        prescription: prescription.text,
+      );
+
+      final userRepository = Get.put(UserRepoisitory());
+      userRepository.saveUserRecord(newUser);
+      fetchUserRecords();
+
+      ///Show Success Message
+      TLoaders.successSnackBar(
+        title: "Congratulation",
+        message: 'Updated Successfully',
+      );
+      TFullScreenLoader.stopLoading();
+
+      Get.back();
+    } catch (e) {
+      TLoaders.errorSnackBar(title: "oh Snap", message: e.toString());
+      TFullScreenLoader.stopLoading();
+    }
+  }
 }
