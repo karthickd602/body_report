@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:body_checkup/routes/app_pages.dart';
+import 'package:body_checkup/utils/local_storage/storage_utility.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
@@ -44,8 +46,10 @@ class VerifyEmailController extends GetxController {
               image: TImages.successfullyRegisterAnimation,
               title: TTexts.yourAccountCreatedTitle,
               subtitle: TTexts.yourAccountCreatedSubTitle,
-              onpressed: () =>
-                  AuthendicationRepository.instance.screenRedirect(),
+              onpressed: () {
+                TLocalStorage.instance().clearAll();
+                Get.toNamed(AppPages.login);
+              },
             ));
       }
     });

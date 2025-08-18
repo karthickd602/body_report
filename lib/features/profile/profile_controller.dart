@@ -1,12 +1,16 @@
+import 'dart:io';
+import 'package:body_checkup/models/user_model.dart';
+import 'package:body_checkup/repository/user/user_repository.dart';
+import 'package:body_checkup/utils/constants/image_strings.dart';
 import 'package:body_checkup/utils/helpers/path_provider.dart';
 import 'package:body_checkup/utils/local_storage/storage_utility.dart';
-
-import '../../models/user_model.dart';
-import '../../repository/user/user_repository.dart';
-import '../../utils/constants/image_strings.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileController extends GetxController {
-  ///Variables
+  /// Variables
   final firstName = TextEditingController();
   final lastName = TextEditingController();
   final email = TextEditingController();
@@ -14,7 +18,7 @@ class ProfileController extends GetxController {
   final phoneNo = TextEditingController();
   final password = TextEditingController();
 
-  // New Medical Data
+  // Medical Data
   final dob = TextEditingController();
   final medicalHistory = TextEditingController();
   final prescription = TextEditingController();
@@ -27,10 +31,37 @@ class ProfileController extends GetxController {
 
   Rx<UserModel> user = UserModel.empty().obs;
 
+  /// Profile picture (local path)
+  RxString profilePicture = "".obs;
+
   @override
-  onInit() {
+  void onInit() {
     super.onInit();
     fetchUserRecords();
+    loadProfilePicture();
+  }
+
+  /// Pick image from gallery/camera
+  Future<void> pickProfilePicture({bool fromCamera = false}) async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(
+      source: fromCamera ? ImageSource.camera : ImageSource.gallery,
+    );
+
+    if (pickedFile != null) {
+      profilePicture.value = pickedFile.path;
+
+      /// Save in local storage
+      await storage.saveData("profile_picture", pickedFile.path);
+    }
+  }
+
+  /// Load saved profile picture
+  void loadProfilePicture() {
+    final savedPath = storage.readData("profile_picture");
+    if (savedPath != null && savedPath.isNotEmpty) {
+      profilePicture.value = savedPath;
+    }
   }
 
   /// Fetch User Records
@@ -38,8 +69,8 @@ class ProfileController extends GetxController {
     try {
       profileLoader.value = true;
       final users = await userRepository.fetchUserDetails();
-      this.user(users);
-      print("User Name : ${user.value.firstName}");
+      user(users);
+
       firstName.text = user.value.firstName;
       lastName.text = user.value.lastName;
       username.text = user.value.userName;
@@ -60,22 +91,16 @@ class ProfileController extends GetxController {
 
   void updateProfile() async {
     try {
-      ///Check Internet Connectivity
       final isConnected = await NetworkManager.instance.isConnected();
-      if (!isConnected) {
-        return;
-      }
+      if (!isConnected) return;
 
-      ///Form Validation
       if (!profileFormKey.currentState!.validate()) return;
 
-      ///start loading
       TFullScreenLoader.openLoadingDialog(
         'We are processing your information...',
         TImages.dockerAnimation,
       );
 
-      ///Save authendication data in firebase firestore
       final newUser = UserModel(
         id: storage.readData(TTexts.userId),
         firstName: firstName.text.trim(),
@@ -83,7 +108,7 @@ class ProfileController extends GetxController {
         phoneNumber: phoneNo.text.trim(),
         userName: username.text.trim(),
         email: email.text.trim(),
-        profilePicture: '',
+        profilePicture: profilePicture.value, // save local path
         emergencyMobile: emergencyMobile.text,
         password: password.text.trim(),
         dob: dob.text,
@@ -92,10 +117,9 @@ class ProfileController extends GetxController {
       );
 
       final userRepository = Get.put(UserRepoisitory());
-      userRepository.saveUserRecord(newUser);
+      await userRepository.saveUserRecord(newUser);
       fetchUserRecords();
 
-      ///Show Success Message
       TLoaders.successSnackBar(
         title: "Congratulation",
         message: 'Updated Successfully',
@@ -104,8 +128,17 @@ class ProfileController extends GetxController {
 
       Get.back();
     } catch (e) {
-      TLoaders.errorSnackBar(title: "oh Snap", message: e.toString());
+      TLoaders.errorSnackBar(title: "Oh Snap", message: e.toString());
       TFullScreenLoader.stopLoading();
+    }
+  }
+
+  Future<void> callEmergency(String number) async {
+    final Uri uri = Uri(scheme: "tel", path: number);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      Get.snackbar("Error", "Could not call $number");
     }
   }
 }

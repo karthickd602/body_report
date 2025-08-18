@@ -1,7 +1,7 @@
+import 'dart:io';
 import 'package:body_checkup/features/authendication/screens/login/login.dart';
 import 'package:body_checkup/features/profile/profile_controller.dart';
 import 'package:body_checkup/repository/authendication/authendication_repository.dart';
-import 'package:body_checkup/utils/local_storage/storage_utility.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -30,13 +30,39 @@ class ProfilePage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Obx(
-          ()=> ListView(
+              () => ListView(
             children: [
-              CircleAvatar(
-                radius: 50,
-                backgroundColor: Colors.blue.shade100,
-                child: const Icon(Iconsax.user, size: 50),
+              Center(
+                child: Stack(
+                  children: [
+                    CircleAvatar(
+                      radius: 60,
+                      backgroundColor: Colors.blue.shade100,
+                      backgroundImage: controller.profilePicture.value.isNotEmpty
+                          ? FileImage(File(controller.profilePicture.value))
+                          : null,
+                      child: controller.profilePicture.value.isEmpty
+                          ? const Icon(Iconsax.user, size: 60)
+                          : null,
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: InkWell(
+                        onTap: () {
+                          _showImagePickerOptions(context, controller);
+                        },
+                        child: const CircleAvatar(
+                          radius: 20,
+                          backgroundColor: Colors.blue,
+                          child: Icon(Iconsax.camera, color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
+
               const SizedBox(height: 20),
 
               _buildTile("First Name", controller.user.value.firstName),
@@ -50,7 +76,10 @@ class ProfilePage extends StatelessWidget {
 
               const SizedBox(height: 20),
               ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.red,side: BorderSide(color: Colors.red)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  side: const BorderSide(color: Colors.red),
+                ),
                 onPressed: () {
                   AuthendicationRepository.instance.logout();
                 },
@@ -68,6 +97,39 @@ class ProfilePage extends StatelessWidget {
     return ListTile(
       title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
       subtitle: Text(value.isEmpty ? "-" : value),
+    );
+  }
+
+  void _showImagePickerOptions(
+      BuildContext context, ProfileController controller) {
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.all(16),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Wrap(
+          children: [
+            ListTile(
+              leading: const Icon(Iconsax.image),
+              title: const Text("Pick from Gallery"),
+              onTap: () {
+                controller.pickProfilePicture(fromCamera: false);
+                Get.back();
+              },
+            ),
+            ListTile(
+              leading: const Icon(Iconsax.camera),
+              title: const Text("Take a Photo"),
+              onTap: () {
+                controller.pickProfilePicture(fromCamera: true);
+                Get.back();
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

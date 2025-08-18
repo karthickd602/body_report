@@ -174,9 +174,17 @@ class TSignUpForm extends StatelessWidget {
               const SizedBox(height: TSizes.spaceBtwInputFields),
               TextFormField(
                 controller: controller.emergencyMobile,
+                maxLength: 10,
+                keyboardType: TextInputType.phone,
+                buildCounter: (context,
+                    {required int currentLength,
+                      required int? maxLength,
+                      required bool isFocused}) {
+                  return null;
+                },
                 validator: (value) =>
                     TValidator.validateEmptyField("Emergency Contact", value),
-                decoration: const InputDecoration(
+                decoration: const InputDecoration(helperText: '',
                   labelText: "Emergency Contact",
                   prefixIcon: Icon(Iconsax.call),
                 ),
