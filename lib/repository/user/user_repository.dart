@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../utils/exceptions/firebase_auth_exceptions.dart';
@@ -45,7 +46,7 @@ class UserRepoisitory extends GetxController {
       // print("User Id: ${AuthendicationRepository.instance.authUser?.uid}");
       final documentSnapshot = await _db
           .collection("Users")
-          .doc(storage.readData(TTexts.userId))
+          .doc(GetStorage().read(TTexts.userId))
           .get();
       if (documentSnapshot.exists) {
         return UserModel.fromSnapshot(documentSnapshot);

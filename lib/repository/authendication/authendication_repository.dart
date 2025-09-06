@@ -1,4 +1,5 @@
 import 'package:body_checkup/routes/app_pages.dart';
+import 'package:body_checkup/utils/constants/text_strings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -39,7 +40,8 @@ class AuthendicationRepository extends GetxController {
       if (user.emailVerified) {
         /// Intialize the user specefic Local storage
         await TLocalStorage.init(user.uid);
-Get.offAllNamed(AppPages.bottomNav);
+     TLocalStorage.instance().saveData(TTexts.userId, user.uid);
+        Get.offAllNamed(AppPages.bottomNav);
       } else {
         Get.offAll(() => VerifyEmailScreen(email: _auth.currentUser?.email));
       }
@@ -54,14 +56,18 @@ Get.offAllNamed(AppPages.bottomNav);
     ///Local Storage
   }
 
-/*--------------------------------Email & Password sign in ---------------------------*/
+  /*--------------------------------Email & Password sign in ---------------------------*/
 
   /// [EmailAuthentication  LOGIN ] - signing
   Future<UserCredential> loginWithEmailAndPassword(
-      String email, String password) async {
+    String email,
+    String password,
+  ) async {
     try {
       return await _auth.signInWithEmailAndPassword(
-          email: email, password: password);
+        email: email,
+        password: password,
+      );
     } on FirebaseAuthException catch (e) {
       print("Login 1:${e.code}");
       throw TFirebaseAuthException(e.code).message;
@@ -91,7 +97,9 @@ Get.offAllNamed(AppPages.bottomNav);
 
       ///create a new credential
       final credential = GoogleAuthProvider.credential(
-          accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
 
       ///once signed in return the UserCredential
       return await _auth.signInWithCredential(credential);
@@ -111,10 +119,14 @@ Get.offAllNamed(AppPages.bottomNav);
 
   /// [EmailAuthentication create] - Register
   Future<UserCredential> registerWithEmailAndPassword(
-      String email, String password) async {
+    String email,
+    String password,
+  ) async {
     try {
       return await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
+        email: email,
+        password: password,
+      );
     } on FirebaseAuthException catch (e) {
       throw TFirebaseAuthException(e.code).message;
     } on FirebaseException catch (e) {
@@ -164,10 +176,14 @@ Get.offAllNamed(AppPages.bottomNav);
 
   /// Re- Authentication
   Future<void> reAuthendicationWithEmailAndPassword(
-      String email, String password) async {
+    String email,
+    String password,
+  ) async {
     try {
-      AuthCredential credential =
-          EmailAuthProvider.credential(email: email, password: password);
+      AuthCredential credential = EmailAuthProvider.credential(
+        email: email,
+        password: password,
+      );
       await _auth.currentUser!.reauthenticateWithCredential(credential);
     } on FirebaseAuthException catch (e) {
       throw TFirebaseAuthException(e.code).message;
@@ -186,6 +202,8 @@ Get.offAllNamed(AppPages.bottomNav);
   Future<void> logout() async {
     try {
       await FirebaseAuth.instance.signOut();
+      GetStorage().remove(TTexts.userId);
+      TLocalStorage.instance().removeData(TTexts.userId);
       Get.offAllNamed(AppPages.login);
     } on FirebaseAuthException catch (e) {
       throw TFirebaseAuthException(e.code).message;

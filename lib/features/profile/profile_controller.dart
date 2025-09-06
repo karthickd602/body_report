@@ -17,7 +17,7 @@ class ProfileController extends GetxController {
   final username = TextEditingController();
   final phoneNo = TextEditingController();
   final password = TextEditingController();
-
+final isLoading = false.obs;
   // Medical Data
   final dob = TextEditingController();
   final medicalHistory = TextEditingController();
@@ -68,6 +68,8 @@ class ProfileController extends GetxController {
   Future<void> fetchUserRecords() async {
     try {
       profileLoader.value = true;
+
+      print("USerId ---- ${storage.readData(TTexts.userId)}");
       final users = await userRepository.fetchUserDetails();
       user(users);
 

@@ -3,6 +3,7 @@ import 'package:body_checkup/features/dashboard/step_controller.dart';
 import 'package:body_checkup/features/prediction/prediction_report.dart';
 import 'package:body_checkup/utils/constants/path_provider.dart';
 import 'package:body_checkup/utils/constants/sizes.dart';
+import 'package:body_checkup/utils/helpers/path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -21,74 +22,83 @@ class DashboardPage extends StatelessWidget {
       appBar: TAppBar(title: 'Dashboard'),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(TSizes.defaultSpace),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            /// Greeting
-            Text(
-              "Welcome, ${profileController.user.value.firstName} 👋",
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            const SizedBox(height: 20),
+        child: Obx(
+          ()=>profileController.profileLoader.value?Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Center(child: CircularProgressIndicator(color: TColors.primary,)),
+            ],
+          ): Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              /// Greeting
+              Text(
+                "Welcome, ${profileController.user.value.firstName} 👋",
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              const SizedBox(height: 20),
 
-            /// Step Count Card (Reactive)
-            Obx(
-              () => TRoundedContainer(
-                showborder: true,
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Row(
-                    children: [
-                      Icon(Iconsax.activity, size: 40, color: Colors.blue),
-                      const SizedBox(width: 20),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Today's Steps",
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          Text(
-                            "${stepController.steps.value}",
-                            style: const TextStyle(
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold,
+              /// Step Count Card (Reactive)
+              Obx(
+                () => TRoundedContainer(
+                  showborder: true,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Row(
+                      children: [
+                        Icon(Iconsax.activity, size: 40, color: Colors.blue),
+                        const SizedBox(width: 20),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Today's Steps",
+                              style: TextStyle(fontSize: 16),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                            Text(
+                              "${stepController.steps.value}",
+                              style: const TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 20),
+              const SizedBox(height: 20),
 
-            /// Medical Info Summary
-            Text(
-              "Medical Info",
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(height: 10),
-            Obx(
-              () => Column(
-                children: [
-                  _buildTile("Date of Birth", profileController.user.value.dob),
-                  InkWell(
-                    onTap: () => Get.to(() => PatientReportPage()),
-                    child: _buildTile(
-                      "Medical History",
-                      profileController.user.value.medicalHistory,
-                    ),
-                  ),
-                  _buildTile(
-                    "Prescription",
-                    profileController.user.value.prescription,
-                  ),
-                ],
+              /// Medical Info Summary
+              Text(
+                "Medical Info",
+                style: Theme.of(context).textTheme.titleMedium,
               ),
-            ),
-          ],
+              const SizedBox(height: 10),
+              Obx(
+                () => Column(
+                  children: [
+                    _buildTile("Date of Birth", profileController.user.value.dob),
+                    InkWell(
+                      onTap: () => Get.to(() => PatientReportPage()),
+                      child: _buildTile(
+                        "Medical History",
+                        profileController.user.value.medicalHistory,
+                      ),
+                    ),
+                    _buildTile(
+                      "Prescription",
+                      profileController.user.value.prescription,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
