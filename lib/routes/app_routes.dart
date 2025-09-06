@@ -1,6 +1,7 @@
 
 import 'package:body_checkup/features/authendication/screens/login/login.dart';
 
+import '../features/dashboard/dashboard_bindings.dart';
 import '../features/splash/splash_page.dart';
 import '../navigation_menu.dart';
 import '../utils/helpers/path_provider.dart';
@@ -76,13 +77,9 @@ class AppRoutes {
     // ),
     GetPage(
       name: AppPages.bottomNav,
-      // bindings: [
-      //   DashboardBindings(),
-      //   AccountsBindings(),
-      //   ProductionBindings(),
-      //   QualityControlBindings(),
-      //   BottomNavBindings(),
-      // ],
+      bindings: [
+        DashboardBindings(),
+      ],
       page: () => NavigationMenu(),
     ),
   ];

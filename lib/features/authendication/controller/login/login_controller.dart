@@ -55,6 +55,9 @@ class LoginController extends GetxController {
           .loginWithEmailAndPassword(email.text.trim(), password.text.trim());
 print("Userr Isddd : ${auth.user!.uid}");
       TLocalStorage.instance().saveData(TTexts.userId , auth.user!.uid);
+
+     GetStorage().write(TTexts.userId, auth.user!.uid);
+     // locStorage.write(TTexts.userId, auth.user!.uid);
       TFullScreenLoader.stopLoading();
 
       AuthendicationRepository.instance.screenRedirect();

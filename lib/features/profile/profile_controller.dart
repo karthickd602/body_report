@@ -6,6 +6,7 @@ import 'package:body_checkup/utils/helpers/path_provider.dart';
 import 'package:body_checkup/utils/local_storage/storage_utility.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -25,7 +26,8 @@ class ProfileController extends GetxController {
   final emergencyMobile = TextEditingController();
   final profileLoader = false.obs;
 
-  final storage = TLocalStorage.instance();
+  final localStorage = TLocalStorage.instance();
+  final storage =GetStorage();
   final profileFormKey = GlobalKey<FormState>();
   final userRepository = Get.put(UserRepoisitory());
 
@@ -52,13 +54,13 @@ class ProfileController extends GetxController {
       profilePicture.value = pickedFile.path;
 
       /// Save in local storage
-      await storage.saveData("profile_picture", pickedFile.path);
+      await localStorage.saveData("profile_picture", pickedFile.path);
     }
   }
 
   /// Load saved profile picture
   void loadProfilePicture() {
-    final savedPath = storage.readData("profile_picture");
+    final savedPath = localStorage.readData("profile_picture");
     if (savedPath != null && savedPath.isNotEmpty) {
       profilePicture.value = savedPath;
     }
@@ -67,6 +69,10 @@ class ProfileController extends GetxController {
   /// Fetch User Records
   Future<void> fetchUserRecords() async {
     try {
+      final isConnected = await NetworkManager.instance.isConnected();
+      if(!isConnected) return;
+
+      print("UserId ---- ${storage.read(TTexts.userId)}");
       profileLoader.value = true;
       final users = await userRepository.fetchUserDetails();
       user(users);
@@ -102,7 +108,7 @@ class ProfileController extends GetxController {
       );
 
       final newUser = UserModel(
-        id: storage.readData(TTexts.userId),
+        id: localStorage.readData(TTexts.userId),
         firstName: firstName.text.trim(),
         lastName: lastName.text.trim(),
         phoneNumber: phoneNo.text.trim(),
