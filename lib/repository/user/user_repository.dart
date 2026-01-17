@@ -15,7 +15,7 @@ import '../../../utils/exceptions/format_exceptions.dart';
 import '../../../utils/exceptions/platform_exceptions.dart';
 import '../../models/user_model.dart';
 import '../../utils/constants/text_strings.dart';
-import '../authendication/authendication_repository.dart';
+import '../authentication/authentication_repository.dart';
 
 class UserRepoisitory extends GetxController {
   static UserRepoisitory get instance => Get.find();
@@ -42,8 +42,7 @@ class UserRepoisitory extends GetxController {
   /// Fetch the User Details based on user ID
   Future<UserModel> fetchUserDetails() async {
     try {
-
-      // print("User Id: ${AuthendicationRepository.instance.authUser?.uid}");
+      // print("User Id: ${AuthenticationRepository.instance.authUser?.uid}");
       final documentSnapshot = await _db
           .collection("Users")
           .doc(GetStorage().read(TTexts.userId))
@@ -92,7 +91,7 @@ class UserRepoisitory extends GetxController {
     try {
       return await _db
           .collection('Users')
-          .doc(AuthendicationRepository.instance.authUser?.uid)
+          .doc(AuthenticationRepository.instance.authUser?.uid)
           .update(json);
     } on FirebaseAuthException catch (e) {
       throw TFirebaseAuthException(e.code).message;

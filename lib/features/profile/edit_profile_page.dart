@@ -2,7 +2,7 @@ import 'package:body_checkup/features/profile/profile_controller.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../utils/helpers/path_provider.dart';
-import '../authendication/controller/signup/signup_controller.dart';
+import '../authentication/controller/signup/signup_controller.dart';
 
 class EditProfilePage extends StatelessWidget {
   const EditProfilePage({super.key});
@@ -21,7 +21,8 @@ class EditProfilePage extends StatelessWidget {
             children: [
               TextFormField(
                 controller: controller.firstName,
-                validator:(value)=> TValidator.validateEmptyField("First Name", value),
+                validator: (value) =>
+                    TValidator.validateEmptyField("First Name", value),
                 decoration: const InputDecoration(
                   labelText: "First Name",
                   prefixIcon: Icon(Iconsax.user),
@@ -30,7 +31,8 @@ class EditProfilePage extends StatelessWidget {
               const SizedBox(height: 10),
 
               TextFormField(
-                validator:(value)=> TValidator.validateEmptyField("Last Name", value),
+                validator: (value) =>
+                    TValidator.validateEmptyField("Last Name", value),
 
                 controller: controller.lastName,
                 decoration: const InputDecoration(
@@ -41,9 +43,10 @@ class EditProfilePage extends StatelessWidget {
               const SizedBox(height: 10),
 
               TextFormField(
-                validator:(value)=> TValidator.validateEmptyField("User Name", value),
+                validator: (value) =>
+                    TValidator.validateEmptyField("User Name", value),
 
-                readOnly:true,
+                readOnly: true,
                 controller: controller.username,
                 decoration: const InputDecoration(
                   labelText: "Username",
@@ -54,7 +57,8 @@ class EditProfilePage extends StatelessWidget {
 
               TextFormField(
                 readOnly: true,
-                validator:(value)=> TValidator.validateEmptyField("Email", value),
+                validator: (value) =>
+                    TValidator.validateEmptyField("Email", value),
 
                 controller: controller.email,
                 decoration: const InputDecoration(
@@ -65,7 +69,8 @@ class EditProfilePage extends StatelessWidget {
               const SizedBox(height: 10),
 
               TextFormField(
-                validator:(value)=> TValidator.validateEmptyField("Phone Number", value),
+                validator: (value) =>
+                    TValidator.validateEmptyField("Phone Number", value),
 
                 readOnly: true,
                 controller: controller.phoneNo,
@@ -78,7 +83,8 @@ class EditProfilePage extends StatelessWidget {
 
               TextFormField(
                 controller: controller.dob,
-                validator:(value)=> TValidator.validateEmptyField("Date of Birth", value),
+                validator: (value) =>
+                    TValidator.validateEmptyField("Date of Birth", value),
 
                 readOnly: true,
                 decoration: const InputDecoration(
@@ -88,21 +94,23 @@ class EditProfilePage extends StatelessWidget {
                 onTap: () async {
                   DateTime? pickedDate = await showDatePicker(
                     context: context,
-                    initialDate: DateTime.tryParse(controller.dob.text) ??
+                    initialDate:
+                        DateTime.tryParse(controller.dob.text) ??
                         DateTime(2000),
                     firstDate: DateTime(1900),
                     lastDate: DateTime.now(),
                   );
                   if (pickedDate != null) {
                     controller.dob.text =
-                    "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+                        "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
                   }
                 },
               ),
               const SizedBox(height: 10),
 
               TextFormField(
-                validator:(value)=> TValidator.validateEmptyField("Medical History", value),
+                validator: (value) =>
+                    TValidator.validateEmptyField("Medical History", value),
 
                 controller: controller.medicalHistory,
                 maxLines: 3,
@@ -114,7 +122,8 @@ class EditProfilePage extends StatelessWidget {
               const SizedBox(height: 10),
 
               TextFormField(
-                validator:(value)=> TValidator.validateEmptyField("Prescription", value),
+                validator: (value) =>
+                    TValidator.validateEmptyField("Prescription", value),
                 controller: controller.prescription,
                 maxLines: 3,
                 decoration: const InputDecoration(
@@ -132,6 +141,95 @@ class EditProfilePage extends StatelessWidget {
                   prefixIcon: Icon(Iconsax.call),
                 ),
               ),
+              const SizedBox(height: 10),
+
+              /// Personal Details Section
+              const Divider(),
+              const SizedBox(height: 10),
+              Text(
+                "Personal Details",
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const SizedBox(height: 15),
+
+              // Gender & Blood Group Row
+              Row(
+                children: [
+                  Expanded(
+                    child: DropdownButtonFormField<String>(
+                      value: controller.gender.text.isNotEmpty
+                          ? controller.gender.text
+                          : null,
+                      decoration: const InputDecoration(
+                        labelText: "Gender",
+                        prefixIcon: Icon(Iconsax.user),
+                      ),
+                      items: ["Male", "Female", "Other"]
+                          .map(
+                            (label) => DropdownMenuItem(
+                              value: label,
+                              child: Text(label),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (value) {
+                        controller.gender.text = value!;
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: DropdownButtonFormField<String>(
+                      value: controller.bloodGroup.text.isNotEmpty
+                          ? controller.bloodGroup.text
+                          : null,
+                      decoration: const InputDecoration(
+                        labelText: "Blood Group",
+                        prefixIcon: Icon(Iconsax.drop),
+                      ),
+                      items: ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"]
+                          .map(
+                            (label) => DropdownMenuItem(
+                              value: label,
+                              child: Text(label),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (value) {
+                        controller.bloodGroup.text = value!;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+
+              // Height & Weight Row
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: controller.height,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        labelText: "Height (cm)",
+                        prefixIcon: Icon(Iconsax.ruler),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: TextFormField(
+                      controller: controller.weight,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        labelText: "Weight (kg)",
+                        prefixIcon: Icon(Iconsax.weight),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
 
               const SizedBox(height: 20),
               ElevatedButton.icon(
@@ -140,7 +238,7 @@ class EditProfilePage extends StatelessWidget {
                   controller.updateProfile();
                   Get.back(); // Go back to profile page
                 },
-                icon:  Icon(Iconsax.save_2),
+                icon: Icon(Iconsax.save_2),
                 label: const Text("Save Changes"),
               ),
             ],

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/get_instance.dart';
 
-import '../../../../repository/authendication/authendication_repository.dart';
+import 'package:body_checkup/repository/authentication/authentication_repository.dart';
 import '../../../../utils/constants/image_strings.dart';
 import '../../../../utils/constants/sizes.dart';
 import '../../../../utils/constants/text_strings.dart';
@@ -22,8 +22,9 @@ class VerifyEmailScreen extends StatelessWidget {
       appBar: AppBar(
         actions: [
           IconButton(
-              onPressed: () => AuthendicationRepository.instance.logout(),
-              icon: const Icon(CupertinoIcons.clear)),
+            onPressed: () => AuthenticationRepository.instance.logout(),
+            icon: const Icon(CupertinoIcons.clear),
+          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -46,7 +47,7 @@ class VerifyEmailScreen extends StatelessWidget {
               ),
               const SizedBox(height: TSizes.spaceBtwSections),
               Text(
-                email??'',
+                email ?? '',
                 style: Theme.of(context).textTheme.labelLarge,
                 textAlign: TextAlign.center,
               ),
@@ -59,16 +60,20 @@ class VerifyEmailScreen extends StatelessWidget {
               const SizedBox(height: TSizes.spaceBtwSections),
 
               ///Buttons
-
               SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                      onPressed: () => controller.checkEmailVerificationStatus(),
-                      child: const Text(TTexts.tContinue))),
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () => controller.checkEmailVerificationStatus(),
+                  child: const Text(TTexts.tContinue),
+                ),
+              ),
               SizedBox(
-                  width: double.infinity,
-                  child: TextButton(
-                      onPressed: () =>controller.sendMailVerification(), child: const Text(TTexts.resendEmail)))
+                width: double.infinity,
+                child: TextButton(
+                  onPressed: () => controller.sendMailVerification(),
+                  child: const Text(TTexts.resendEmail),
+                ),
+              ),
             ],
           ),
         ),

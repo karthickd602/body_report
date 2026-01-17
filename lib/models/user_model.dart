@@ -19,6 +19,12 @@ class UserModel {
   String password;
   String profilePicture;
 
+  // New Fields
+  String bloodGroup;
+  String height;
+  String weight;
+  String gender;
+
   UserModel({
     required this.id,
     required this.firstName,
@@ -32,6 +38,10 @@ class UserModel {
     required this.dob,
     required this.medicalHistory,
     required this.prescription,
+    this.bloodGroup = '',
+    this.height = '',
+    this.weight = '',
+    this.gender = '',
   });
 
   ///Helper function to get the full name
@@ -66,6 +76,10 @@ class UserModel {
     medicalHistory: '',
     prescription: '',
     emergencyMobile: '',
+    bloodGroup: '',
+    height: '',
+    weight: '',
+    gender: '',
   );
 
   ///Convert model to Json struture for storing data in Firebase
@@ -82,6 +96,10 @@ class UserModel {
       'MedicalHistory': medicalHistory,
       'Prescription': prescription,
       'EmergencyMobile': emergencyMobile,
+      'BloodGroup': bloodGroup,
+      'Height': height,
+      'Weight': weight,
+      'Gender': gender,
     };
   }
 
@@ -100,10 +118,14 @@ class UserModel {
         phoneNumber: data['PhoneNumber'] ?? '',
         password: data['Password'] ?? '',
         profilePicture: data['ProfilePicture'] ?? '',
-        dob: data['Dob'],
-        medicalHistory: data['MedicalHistory'],
-        prescription: data['Prescription'],
-        emergencyMobile: data['EmergencyMobile'],
+        dob: data['Dob'] ?? '',
+        medicalHistory: data['MedicalHistory'] ?? '',
+        prescription: data['Prescription'] ?? '',
+        emergencyMobile: data['EmergencyMobile'] ?? '',
+        bloodGroup: data['BloodGroup'] ?? '',
+        height: data['Height'] ?? '',
+        weight: data['Weight'] ?? '',
+        gender: data['Gender'] ?? '',
       );
     } else {
       throw 'No data ';

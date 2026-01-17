@@ -10,15 +10,15 @@ import 'package:google_sign_in/google_sign_in.dart';
 import '../../../utils/exceptions/firebase_exceptions.dart';
 import '../../../utils/exceptions/format_exceptions.dart';
 import '../../../utils/exceptions/platform_exceptions.dart';
-import '../../features/authendication/screens/login/login.dart';
-import '../../features/authendication/screens/onBoarding/onboarding.dart';
-import '../../features/authendication/screens/signup/verify_email.dart';
+import '../../features/authentication/screens/login/login.dart';
+import '../../features/authentication/screens/onBoarding/onboarding.dart';
+import '../../features/authentication/screens/signup/verify_email.dart';
 import '../../utils/exceptions/firebase_auth_exceptions.dart';
 import '../../utils/local_storage/storage_utility.dart';
 // import '../user/user_repository.dart';
 
-class AuthendicationRepository extends GetxController {
-  static AuthendicationRepository get instance => Get.find();
+class AuthenticationRepository extends GetxController {
+  static AuthenticationRepository get instance => Get.find();
 
   /// Variable
   final deviceStorage = GetStorage();
@@ -28,7 +28,8 @@ class AuthendicationRepository extends GetxController {
 
   @override
   void onReady() {
-    screenRedirect();
+    // screenRedirect();
+    // Commented out to prevent double navigation. SplashController handles the initial redirect.
   }
 
   ///Screen redirect to relevant screen
@@ -40,7 +41,7 @@ class AuthendicationRepository extends GetxController {
       if (user.emailVerified) {
         /// Intialize the user specefic Local storage
         await TLocalStorage.init(user.uid);
-     TLocalStorage.instance().saveData(TTexts.userId, user.uid);
+        TLocalStorage.instance().saveData(TTexts.userId, user.uid);
         Get.offAllNamed(AppPages.bottomNav);
       } else {
         Get.offAll(() => VerifyEmailScreen(email: _auth.currentUser?.email));
@@ -175,7 +176,7 @@ class AuthendicationRepository extends GetxController {
   }
 
   /// Re- Authentication
-  Future<void> reAuthendicationWithEmailAndPassword(
+  Future<void> reAuthenticateWithEmailAndPassword(
     String email,
     String password,
   ) async {

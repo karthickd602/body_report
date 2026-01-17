@@ -1,5 +1,8 @@
-
-import 'package:body_checkup/features/authendication/screens/login/login.dart';
+import 'package:body_checkup/features/authentication/screens/login/login.dart';
+import 'package:body_checkup/features/tools/bmi_calculator/bmi_page.dart';
+import 'package:body_checkup/features/tools/water_tracker/water_tracker_page.dart';
+import 'package:body_checkup/features/patient_options/appointment/appointment_booking_page.dart';
+import 'package:body_checkup/features/patient_options/health_tips/health_tips_page.dart';
 
 import '../features/splash/splash_page.dart';
 import '../navigation_menu.dart';
@@ -8,14 +11,8 @@ import 'app_pages.dart';
 
 class AppRoutes {
   static List<GetPage> routes = [
-    GetPage(
-      name: AppPages.splash,
-      page: () => const SplashPage(),
-    ),
-    GetPage(
-      name: AppPages.login,
-      page: () => const LoginScreen(),
-    ),
+    GetPage(name: AppPages.splash, page: () => const SplashPage()),
+    GetPage(name: AppPages.login, page: () => const LoginScreen()),
     // GetPage(
     //   name: AppPages.dashboard,
     //   binding: DashboardBindings(),
@@ -85,5 +82,12 @@ class AppRoutes {
       // ],
       page: () => NavigationMenu(),
     ),
+    GetPage(name: '/bmi-calculator', page: () => const BMIPage()),
+    GetPage(name: '/water-tracker', page: () => const WaterTrackerPage()),
+    GetPage(
+      name: '/appointment-booking',
+      page: () => const AppointmentBookingPage(),
+    ),
+    GetPage(name: '/health-tips', page: () => const HealthTipsPage()),
   ];
 }

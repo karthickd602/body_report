@@ -1,4 +1,4 @@
-import 'package:body_checkup/repository/authendication/authendication_repository.dart';
+import 'package:body_checkup/repository/authentication/authentication_repository.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -17,12 +17,9 @@ class SplashController extends GetxController {
   }
 
   void validate() async {
-
-
     await Permission.activityRecognition.request();
 
-// Get.put(()=>AuthendicationRepository());
-await AuthendicationRepository.instance.screenRedirect();
+    await AuthenticationRepository.instance.screenRedirect();
     // Get.offNamed(AppPages.bottomNav);
     // Get.offNamed(AppPages.login);
   }

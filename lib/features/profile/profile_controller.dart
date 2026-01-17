@@ -17,12 +17,19 @@ class ProfileController extends GetxController {
   final username = TextEditingController();
   final phoneNo = TextEditingController();
   final password = TextEditingController();
-final isLoading = false.obs;
+  final isLoading = false.obs;
   // Medical Data
   final dob = TextEditingController();
   final medicalHistory = TextEditingController();
   final prescription = TextEditingController();
   final emergencyMobile = TextEditingController();
+
+  // New Profile Data
+  final bloodGroup = TextEditingController();
+  final height = TextEditingController();
+  final weight = TextEditingController();
+  final gender = TextEditingController();
+
   final profileLoader = false.obs;
 
   final storage = TLocalStorage.instance();
@@ -81,6 +88,14 @@ final isLoading = false.obs;
       dob.text = user.value.dob;
       medicalHistory.text = user.value.medicalHistory;
       prescription.text = user.value.prescription;
+      emergencyMobile.text = user.value.emergencyMobile;
+
+      // Load new fields
+      bloodGroup.text = user.value.bloodGroup;
+      height.text = user.value.height;
+      weight.text = user.value.weight;
+      gender.text = user.value.gender;
+
       profileLoader.value = false;
     } catch (e) {
       TLoaders.errorSnackBar(title: "Oh Snap!", message: e.toString());
@@ -111,11 +126,17 @@ final isLoading = false.obs;
         userName: username.text.trim(),
         email: email.text.trim(),
         profilePicture: profilePicture.value, // save local path
-        emergencyMobile: emergencyMobile.text,
+        emergencyMobile: emergencyMobile.text.trim(),
         password: password.text.trim(),
-        dob: dob.text,
-        medicalHistory: medicalHistory.text,
-        prescription: prescription.text,
+        dob: dob.text.trim(),
+        medicalHistory: medicalHistory.text.trim(),
+        prescription: prescription.text.trim(),
+
+        // Save new fields
+        bloodGroup: bloodGroup.text.trim(),
+        height: height.text.trim(),
+        weight: weight.text.trim(),
+        gender: gender.text.trim(),
       );
 
       final userRepository = Get.put(UserRepoisitory());

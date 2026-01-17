@@ -1,4 +1,4 @@
-import 'package:body_checkup/features/authendication/screens/signup/widget/terms_and_condition.dart';
+import 'package:body_checkup/features/authentication/screens/signup/widget/terms_and_condition.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../../../utils/helpers/path_provider.dart';
@@ -25,7 +25,9 @@ class TSignUpForm extends StatelessWidget {
                     child: TextFormField(
                       controller: controller.firstName,
                       validator: (value) => TValidator.validateEmptyField(
-                          TTexts.firstName, value),
+                        TTexts.firstName,
+                        value,
+                      ),
                       decoration: const InputDecoration(
                         prefixIcon: Icon(Iconsax.user),
                         labelText: TTexts.firstName,
@@ -36,8 +38,8 @@ class TSignUpForm extends StatelessWidget {
                   Expanded(
                     child: TextFormField(
                       controller: controller.lastName,
-                      validator: (value) => TValidator.validateEmptyField(
-                          TTexts.lastName, value),
+                      validator: (value) =>
+                          TValidator.validateEmptyField(TTexts.lastName, value),
                       decoration: const InputDecoration(
                         prefixIcon: Icon(Iconsax.user),
                         labelText: TTexts.lastName,
@@ -79,12 +81,15 @@ class TSignUpForm extends StatelessWidget {
                 validator: (value) => TValidator.validatePhoneNumber(value),
                 keyboardType: TextInputType.phone,
                 maxLength: 10,
-                buildCounter: (context,
-                    {required int currentLength,
+                buildCounter:
+                    (
+                      context, {
+                      required int currentLength,
                       required int? maxLength,
-                      required bool isFocused}) {
-                  return null;
-                },
+                      required bool isFocused,
+                    }) {
+                      return null;
+                    },
                 decoration: const InputDecoration(
                   labelText: TTexts.phoneNo,
                   prefixIcon: Icon(Iconsax.call),
@@ -94,7 +99,7 @@ class TSignUpForm extends StatelessWidget {
 
               /// --- Password ---
               Obx(
-                    () => TextFormField(
+                () => TextFormField(
                   controller: controller.password,
                   validator: (value) => TValidator.validatePassword(value),
                   obscureText: controller.hidePassword.value,
@@ -103,10 +108,12 @@ class TSignUpForm extends StatelessWidget {
                     prefixIcon: const Icon(Iconsax.password_check),
                     suffixIcon: IconButton(
                       onPressed: () => controller.hidePassword.value =
-                      !controller.hidePassword.value,
-                      icon: Icon(controller.hidePassword.value
-                          ? Iconsax.eye_slash
-                          : Iconsax.eye),
+                          !controller.hidePassword.value,
+                      icon: Icon(
+                        controller.hidePassword.value
+                            ? Iconsax.eye_slash
+                            : Iconsax.eye,
+                      ),
                     ),
                   ),
                 ),
@@ -139,7 +146,9 @@ class TSignUpForm extends StatelessWidget {
                   );
 
                   if (pickedDate != null) {
-                    controller.dob.text = THelperFunctions.getFormattedDate(pickedDate);
+                    controller.dob.text = THelperFunctions.getFormattedDate(
+                      pickedDate,
+                    );
                     // controller.dob.text =
                     // "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
                   }
@@ -151,8 +160,8 @@ class TSignUpForm extends StatelessWidget {
               TextFormField(
                 controller: controller.medicalHistory,
                 maxLines: 3,
-                validator: (value) => TValidator.validateEmptyField(
-                    "Medical History", value),
+                validator: (value) =>
+                    TValidator.validateEmptyField("Medical History", value),
                 decoration: const InputDecoration(
                   labelText: "Medical History / Conditions",
                   prefixIcon: Icon(Iconsax.hospital),
@@ -176,21 +185,24 @@ class TSignUpForm extends StatelessWidget {
                 controller: controller.emergencyMobile,
                 maxLength: 10,
                 keyboardType: TextInputType.phone,
-                buildCounter: (context,
-                    {required int currentLength,
+                buildCounter:
+                    (
+                      context, {
+                      required int currentLength,
                       required int? maxLength,
-                      required bool isFocused}) {
-                  return null;
-                },
+                      required bool isFocused,
+                    }) {
+                      return null;
+                    },
                 validator: (value) =>
                     TValidator.validateEmptyField("Emergency Contact", value),
-                decoration: const InputDecoration(helperText: '',
+                decoration: const InputDecoration(
+                  helperText: '',
                   labelText: "Emergency Contact",
                   prefixIcon: Icon(Iconsax.call),
                 ),
               ),
               const SizedBox(height: TSizes.spaceBtwInputFields),
-
 
               const SizedBox(height: TSizes.spaceBtwSections),
 

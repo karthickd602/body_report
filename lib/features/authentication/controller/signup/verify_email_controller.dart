@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
 import '../../../../common/widget/success_screen/sucess_screen.dart';
-import '../../../../repository/authendication/authendication_repository.dart';
+import '../../../../repository/authentication/authentication_repository.dart';
 import '../../../../utils/constants/image_strings.dart';
 import '../../../../utils/constants/text_strings.dart';
 import '../../../../utils/snackbars/loaders.dart';
@@ -26,10 +26,11 @@ class VerifyEmailController extends GetxController {
   ///Send Email Verification link
   sendMailVerification() async {
     try {
-      await AuthendicationRepository.instance.sendEmailVerification();
+      await AuthenticationRepository.instance.sendEmailVerification();
       TLoaders.successSnackBar(
-          title: 'Email sent',
-          message: 'Please check your inbox and verify your email.');
+        title: 'Email sent',
+        message: 'Please check your inbox and verify your email.',
+      );
     } catch (e) {
       TLoaders.errorSnackBar(title: 'oh Snap!', message: e.toString());
     }
@@ -42,15 +43,17 @@ class VerifyEmailController extends GetxController {
       final user = FirebaseAuth.instance.currentUser;
       if (user?.emailVerified ?? false) {
         timer.cancel();
-        Get.off(() => SuccessScreen(
-              image: TImages.successfullyRegisterAnimation,
-              title: TTexts.yourAccountCreatedTitle,
-              subtitle: TTexts.yourAccountCreatedSubTitle,
-              onpressed: () {
-                TLocalStorage.instance().clearAll();
-                Get.toNamed(AppPages.login);
-              },
-            ));
+        Get.off(
+          () => SuccessScreen(
+            image: TImages.successfullyRegisterAnimation,
+            title: TTexts.yourAccountCreatedTitle,
+            subtitle: TTexts.yourAccountCreatedSubTitle,
+            onpressed: () {
+              TLocalStorage.instance().clearAll();
+              Get.toNamed(AppPages.login);
+            },
+          ),
+        );
       }
     });
   }
@@ -58,12 +61,14 @@ class VerifyEmailController extends GetxController {
   checkEmailVerificationStatus() async {
     final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null && currentUser.emailVerified) {
-      Get.off(() => SuccessScreen(
-            image: TImages.successfullyRegisterAnimation,
-            title: TTexts.yourAccountCreatedTitle,
-            subtitle: TTexts.yourAccountCreatedSubTitle,
-            onpressed: () => AuthendicationRepository.instance.screenRedirect(),
-          ));
+      Get.off(
+        () => SuccessScreen(
+          image: TImages.successfullyRegisterAnimation,
+          title: TTexts.yourAccountCreatedTitle,
+          subtitle: TTexts.yourAccountCreatedSubTitle,
+          onpressed: () => AuthenticationRepository.instance.screenRedirect(),
+        ),
+      );
     }
   }
 }

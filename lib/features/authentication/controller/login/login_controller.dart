@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
-import '../../../../repository/authendication/authendication_repository.dart';
+import '../../../../repository/authentication/authentication_repository.dart';
 import '../../../../utils/constants/image_strings.dart';
 import '../../../../utils/network/network_manager.dart';
 import '../../../../utils/popups/full_screen_loaders.dart';
@@ -44,24 +44,28 @@ class LoginController extends GetxController {
 
       ///start loading
       TFullScreenLoader.openLoadingDialog(
-          'Logging you in...', TImages.dockerAnimation);
+        'Logging you in...',
+        TImages.dockerAnimation,
+      );
       if (rememberMe.value) {
         localStorage.write("REMEMBER_ME_EMAIL", email.text.trim());
         localStorage.write("REMEMBER_ME_PASSWORD", password.text.trim());
       }
 
       ///Login user using email and password
-   final auth=   await AuthendicationRepository.instance
+      final auth = await AuthenticationRepository.instance
           .loginWithEmailAndPassword(email.text.trim(), password.text.trim());
-print("Userr Isddd : ${auth.user!.uid}");
-      TLocalStorage.instance().saveData(TTexts.userId , auth.user!.uid);
+      print("Userr Isddd : ${auth.user!.uid}");
+      TLocalStorage.instance().saveData(TTexts.userId, auth.user!.uid);
       GetStorage().write(TTexts.userId, auth.user!.uid);
       TFullScreenLoader.stopLoading();
 
-      AuthendicationRepository.instance.screenRedirect();
+      AuthenticationRepository.instance.screenRedirect();
 
       TLoaders.successSnackBar(
-          title: 'Login Successfully', message: email.text.trim());
+        title: 'Login Successfully',
+        message: email.text.trim(),
+      );
     } catch (e) {
       TFullScreenLoader.stopLoading();
       TLoaders.errorSnackBar(title: 'oh Snap', message: e.toString());
@@ -78,7 +82,9 @@ print("Userr Isddd : ${auth.user!.uid}");
       }
       //start loading
       TFullScreenLoader.openLoadingDialog(
-          'Logging you in...', TImages.dockerAnimation);
+        'Logging you in...',
+        TImages.dockerAnimation,
+      );
     } catch (e) {
       TLoaders.errorSnackBar(title: 'oh Snap', message: e.toString());
     } finally {

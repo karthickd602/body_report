@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../repository/authendication/authendication_repository.dart';
+import '../../../../repository/authentication/authentication_repository.dart';
 import '../../../../utils/constants/image_strings.dart';
 import '../../../../utils/network/network_manager.dart';
 import '../../../../utils/popups/full_screen_loaders.dart';
@@ -19,7 +19,9 @@ class ForgetPasswordController extends GetxController {
   sendPasswordResetToEmail() async {
     try {
       TFullScreenLoader.openLoadingDialog(
-          "Processing your request...", TImages.dockerAnimation);
+        "Processing your request...",
+        TImages.dockerAnimation,
+      );
       final isConnected = await NetworkManager.instance.isConnected();
       if (!isConnected) {
         TFullScreenLoader.stopLoading();
@@ -31,16 +33,16 @@ class ForgetPasswordController extends GetxController {
         TFullScreenLoader.stopLoading();
         return;
       }
-      await AuthendicationRepository.instance
-          .sendPasswordVerification(email.text.trim());
+      await AuthenticationRepository.instance.sendPasswordVerification(
+        email.text.trim(),
+      );
       TFullScreenLoader.stopLoading();
       TLoaders.successSnackBar(
-          title: "Email Sent",
-          message: "Reset Password Link Sent to Your Mail Id");
+        title: "Email Sent",
+        message: "Reset Password Link Sent to Your Mail Id",
+      );
 
-      Get.to(() => ResetPassword(
-            email: email.text.toString(),
-          ));
+      Get.to(() => ResetPassword(email: email.text.toString()));
     } catch (e) {
       TFullScreenLoader.stopLoading();
       TLoaders.errorSnackBar(title: "oh snap", message: e.toString());
@@ -50,18 +52,22 @@ class ForgetPasswordController extends GetxController {
   resendPasswordResetToEmail(String email) async {
     try {
       TFullScreenLoader.openLoadingDialog(
-          "Processing your request...", TImages.dockerAnimation);
+        "Processing your request...",
+        TImages.dockerAnimation,
+      );
       final isConnected = await NetworkManager.instance.isConnected();
       if (!isConnected) {
         TFullScreenLoader.stopLoading();
         return;
       }
-      await AuthendicationRepository.instance
-          .sendPasswordVerification(email.trim());
+      await AuthenticationRepository.instance.sendPasswordVerification(
+        email.trim(),
+      );
       TFullScreenLoader.stopLoading();
       TLoaders.successSnackBar(
-          title: "Email Sent",
-          message: "Reset Password Link Sent to Your Mail Id");
+        title: "Email Sent",
+        message: "Reset Password Link Sent to Your Mail Id",
+      );
     } catch (e) {
       TFullScreenLoader.stopLoading();
       TLoaders.errorSnackBar(title: "oh snap", message: e.toString());

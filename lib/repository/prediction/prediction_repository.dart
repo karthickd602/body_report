@@ -15,7 +15,7 @@ import '../../../utils/exceptions/platform_exceptions.dart';
 import '../../models/prediction_model.dart';
 import '../../models/user_model.dart';
 import '../../utils/constants/text_strings.dart';
-import '../authendication/authendication_repository.dart';
+import '../authentication/authentication_repository.dart';
 
 class PredictionRepository extends GetxController {
   static PredictionRepository get instance => Get.find();
@@ -25,7 +25,10 @@ class PredictionRepository extends GetxController {
   /// Save the User Details to Firestore
   Future<void> savePrediction(PatientReportModel patient) async {
     try {
-      return await _db.collection('Predictions').doc(patient.id).set(patient.toJson());
+      return await _db
+          .collection('Predictions')
+          .doc(patient.id)
+          .set(patient.toJson());
     } on FirebaseAuthException catch (e) {
       throw TFirebaseAuthException(e.code).message;
     } on FirebaseException catch (e) {
@@ -38,7 +41,6 @@ class PredictionRepository extends GetxController {
       throw 'something went wrong, please try again ';
     }
   }
-
 
   /// 🔹 Fetch all reports of the logged-in user
   Future<List<PatientReportModel>> fetchAllReports() async {
@@ -53,7 +55,6 @@ class PredictionRepository extends GetxController {
       return querySnapshot.docs
           .map((doc) => PatientReportModel.fromSnapshot(doc))
           .toList();
-
     } catch (e) {
       print(e.toString());
       throw 'Something went wrong: ${e.toString()}';
@@ -86,7 +87,7 @@ class PredictionRepository extends GetxController {
     try {
       return await _db
           .collection('Users')
-          .doc(AuthendicationRepository.instance.authUser?.uid)
+          .doc(AuthenticationRepository.instance.authUser?.uid)
           .update(json);
     } on FirebaseAuthException catch (e) {
       throw TFirebaseAuthException(e.code).message;
@@ -100,8 +101,4 @@ class PredictionRepository extends GetxController {
       throw 'something went wrong, please try again ';
     }
   }
-
-
-
-
 }
