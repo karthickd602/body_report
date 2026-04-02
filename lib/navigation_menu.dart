@@ -18,7 +18,7 @@ class NavigationMenu extends StatelessWidget {
     final controller = Get.put(NavigationController());
     final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
-      bottomNavigationBar: Obx(
+      bottomNavigationBar:SafeArea(child:  Obx(
         () => CurvedNavigationBar(
             // height: 80.0,
             index: controller.selectedIndex.value,
@@ -58,7 +58,7 @@ class NavigationMenu extends StatelessWidget {
                   label: 'Profile',
                   labelStyle: TextStyle(color: Colors.white)),
             ]),
-      ),
+      ),),
       body: Obx(() => controller.screens[controller.selectedIndex.value]),
     );
   }

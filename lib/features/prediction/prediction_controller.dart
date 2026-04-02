@@ -29,21 +29,40 @@ class PredictionController extends GetxController {
     bp.value = 90 + random.nextInt(50); // BP between 90-140
     heartRate.value = 60 + random.nextInt(60); // HR between 60-120
     sugar.value = 70 + random.nextInt(100); // Sugar between 70-170
+    status.value = ""; // Clear status when randomizing
   }
 
   void predict() {
-    // Evaluate health status
-    if (_isNormal(bp.value, heartRate.value, sugar.value)) {
-      status.value = "Normal ✅";
-    } else {
-      status.value = "Abnormal ⚠️";
-    }
-  }
+    int abnormalCount = 0;
+    bool isCritical = false;
 
-  bool _isNormal(int bp, int hr, int sugar) {
-    return (bp >= 90 && bp <= 120) &&
-        (hr >= 60 && hr <= 100) &&
-        (sugar >= 70 && sugar <= 120);
+    // Check Blood Pressure
+    if (bp.value < 90 || bp.value > 120) {
+      abnormalCount++;
+      if (bp.value < 70 || bp.value > 160) isCritical = true;
+    }
+
+    // Check Heart Rate
+    if (heartRate.value < 60 || heartRate.value > 100) {
+      abnormalCount++;
+      if (heartRate.value < 50 || heartRate.value > 140) isCritical = true;
+    }
+
+    // Check Sugar Level
+    if (sugar.value < 70 || sugar.value > 120) {
+      abnormalCount++;
+      if (sugar.value < 50 || sugar.value > 200) isCritical = true;
+    }
+
+    if (abnormalCount == 0) {
+      status.value = "Normal ✅";
+    } else if (isCritical) {
+      status.value = "Critical 🚨";
+    } else if (abnormalCount == 1) {
+      status.value = "Mild Risk ⚠️";
+    } else {
+      status.value = "High Risk 🔴";
+    }
   }
 
   /// Fetch all reports
@@ -81,7 +100,7 @@ class PredictionController extends GetxController {
         status: status.value,
       );
 
-      predictionRepo.savePrediction(newPrediction);
+      await predictionRepo.savePrediction(newPrediction);
 
       TLoaders.successSnackBar(
         title: "Success",
@@ -91,8 +110,8 @@ class PredictionController extends GetxController {
       // Refresh list
       allReports.add(newPrediction);
 
-      generateRandomValues();
-      status.value = "";
+      // We do not clear the status or generate new values immediately here 
+      // so the user can read their prediction result.
     } catch (e) {
       TLoaders.warningSnackBar(title: "Oh Snap!", message: e.toString());
     }

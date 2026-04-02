@@ -102,14 +102,10 @@ class PredictionPage extends StatelessWidget {
                       width: double.infinity,
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: controller.status.value.contains("Normal")
-                            ? Colors.green.withOpacity(0.1)
-                            : Colors.red.withOpacity(0.1),
+                        color: _getStatusColor(controller.status.value).withOpacity(0.1),
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: controller.status.value.contains("Normal")
-                              ? Colors.green
-                              : Colors.red,
+                          color: _getStatusColor(controller.status.value),
                         ),
                       ),
                       child: Column(
@@ -124,11 +120,25 @@ class PredictionPage extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
-                              color: controller.status.value.contains("Normal")
-                                  ? Colors.green
-                                  : Colors.red,
+                              color: _getStatusColor(controller.status.value),
                             ),
                           ),
+                          if (controller.status.value.isNotEmpty)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 12.0),
+                              child: Text(
+                                _getMedicalAdvice(
+                                  controller.status.value,
+                                  controller,
+                                ),
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.bodyMedium
+                                    ?.copyWith(
+                                      color: _getStatusColor(controller.status.value),
+                                      height: 1.4,
+                                    ),
+                              ),
+                            ),
                         ],
                       ),
                     )
@@ -171,22 +181,18 @@ class PredictionPage extends StatelessWidget {
                         child: ListTile(
                           leading: Icon(
                             Iconsax.health,
-                            color: report.status.contains("Normal")
-                                ? Colors.green
-                                : Colors.red,
+                            color: _getStatusColor(report.status),
                           ),
                           title: Text(
                             "BP: ${report.bloodPressure} | HR: ${report.heartRate}",
                           ),
                           subtitle: Text(
-                            "Sugar: ${report.sugarLevel} - ${report.status}",
+                            "Sugar: ${report.sugarLevel}",
                           ),
                           trailing: Text(
                             report.status,
                             style: TextStyle(
-                              color: report.status.contains("Normal")
-                                  ? Colors.green
-                                  : Colors.red,
+                              color: _getStatusColor(report.status),
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -200,6 +206,62 @@ class PredictionPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Color _getStatusColor(String status) {
+    if (status.contains("Normal")) return Colors.green;
+    if (status.contains("Mild Risk")) return Colors.orange;
+    if (status.contains("Critical")) return Colors.red[900]!;
+    return Colors.red;
+  }
+
+  String _getMedicalAdvice(String status, PredictionController controller) {
+    if (status.contains("Normal")) {
+      return "Everything looks great! Keep up the healthy lifestyle with regular exercise and a balanced diet.";
+    } else {
+      List<String> advice = [];
+
+      if (controller.bp.value > 120) {
+        advice.add(
+          "• Manage your blood pressure by reducing sodium and stress.",
+        );
+      } else if (controller.bp.value < 90) {
+        advice.add(
+          "• Your blood pressure is low; stay hydrated and eat regular meals.",
+        );
+      }
+
+      if (controller.heartRate.value > 100) {
+        advice.add(
+          "• Your heart rate is high; try to relax and avoid caffeine.",
+        );
+      } else if (controller.heartRate.value < 60) {
+        advice.add(
+          "• Your heart rate is low; consult a doctor if you feel dizzy or weak.",
+        );
+      }
+
+      if (controller.sugar.value > 120) {
+        advice.add(
+          "• High sugar level detected; limit intake of sweets and refined carbs.",
+        );
+      } else if (controller.sugar.value < 70) {
+        advice.add(
+          "• Low sugar level detected; consume fast-acting carbohydrates like fruit juice.",
+        );
+      }
+
+      if (status.contains("Critical")) {
+        advice.add(
+          "\n🚨 URGENT: Your vitals are in the critical range! Please seek immediate medical assistance.",
+        );
+      } else {
+        advice.add(
+          "\nNote: Please consult a healthcare professional for accurate diagnosis and treatment.",
+        );
+      }
+      return advice.join("\n");
+    }
   }
 
   Widget _buildSliderTile(
